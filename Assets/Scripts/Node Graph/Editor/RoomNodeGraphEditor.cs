@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Callbacks;
 
 public class RoomNodeGraphEditor : EditorWindow
 {
     private GUIStyle roomNodeStyle;
+    private static RoomNodeGraphSO currentRoomNodeGraph;
 
     //Define room node value
     private const float nodeWidth = 160f;
@@ -29,6 +29,24 @@ public class RoomNodeGraphEditor : EditorWindow
         roomNodeStyle.normal.textColor = Color.white;
         roomNodeStyle.padding = new RectOffset(nodePadding, nodePadding, nodePadding, nodePadding);  //Distance from word to border
         roomNodeStyle.border = new RectOffset(nodeBorder, nodeBorder, nodeBorder, nodeBorder);
+    }
+
+    /// <summary>
+    /// Open a Room Node Graph editor if a Room Node Graph SO asset is double clicked in the Inspector
+    /// </summary>
+    [OnOpenAsset(0)]
+    public static bool OnDoubleClickAsset(int instanceID, int line)
+    {
+        RoomNodeGraphSO roomNodeGraph = EditorUtility.InstanceIDToObject(instanceID) as RoomNodeGraphSO;
+
+        if (roomNodeGraph != null)
+        {
+            OpenWindow();
+            currentRoomNodeGraph = roomNodeGraph;
+            return true;
+        }
+        return false;
+
     }
 
     /// <summary>
